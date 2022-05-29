@@ -1,0 +1,121 @@
+#include <iostream>
+#include<map>
+using namespace std;
+void caesar( char text [], char key , int size ,map <int,char> l, map<char , int> n  )
+{
+  for(int i = 0 ; i<size ; i++)
+    {
+      int c = (n[text[i]] + n[key] )% 52;
+      text[i] = l[c];
+      }
+}
+
+void xxor(char text [],int size , map<int,char> l , map <char,int> n)
+{
+  for(int i = 0 ; i<size ;i++)
+    {
+      int x = n[text[i]] xor 2 ;
+      text [i]= l[x];
+    }
+}
+
+void shift(char text[] , int size )
+{ 
+  //first bit with the size'th bit
+  //second with the size-1 'th bit ... 
+  for(int i = 0 , j=size-1 ;i<size/2 ; i++ , j-- )
+    {
+      char temp = text[i];
+      text[i]=text[j];
+      text[j]= temp ;
+    }
+}
+
+void circular_shift(char text[] , int size)
+{
+  //to right 
+  char last = text[size- 1];
+  for(int i = size - 1 ; i> 0 ; i--)
+    {
+      text[i] =text[i-1];
+    }
+  text[0]= last ; 
+}
+
+int main() {
+  
+
+  // initializing the map (i give it a number it gives a letter that this number represents)
+  map <int  , char  > letters ;
+  
+  char a = 'A';
+  for(int i = 0 ; i<26 ; i++)
+    {
+      letters[i]= a;
+      a++;
+    }
+  a = 'a';
+  for(int i = 26 ; i<52 ; i++)
+    {
+      letters[i]= a;
+      a++;
+    }
+   // initializing the map (i give it a letter it gives a number that this letter represents)
+  map<char , int> num ;
+
+  int A = 0;
+  for(char i = 'A' ; i<='Z' ; i++)
+    {
+      num[i]= A;
+      A++;
+    }
+  a = 26;
+  for(char i ='a'  ; i<='z'; i++)
+    {
+      num[i]= a;
+      a++;
+    }
+   ////////////////
+  // must be from user 
+  char  plaintxt[16]= {'T','a','l','a','R','a','e','d','H','a','s','h','e','m','m','m'};
+   cout<<"Partial_TEXT is  :  ";
+  for (int i = 0 ; i<16 ; i++)
+    {
+      cout<<plaintxt[i];
+    }
+  cout<<endl ;
+  string key ="Stude";
+  cout<<"Partial_Key is  :  ";
+  for (int i = 0 ; i<5 ; i++)
+    {
+      cout<<key[i];
+    }
+  cout<<endl<<endl;
+  int repetition = 5 ; 
+  for(int j = 1 ; j<=repetition ; j++ ) // for repetition
+    {
+      cout<<"** STAGE " <<j<<"**\n";
+      cout<<"key "<<j<<"is: "<<key[j-1]<<endl;
+  
+  caesar(plaintxt,key[j-1],16,letters,num);
+ 
+       xxor(plaintxt,16,letters,num);
+  
+    circular_shift(plaintxt,16);
+   
+  shift(plaintxt,16);
+
+    cout<<" cipher text is : "<<j <<":";
+    cout<<"     ";
+      for(int i =0 ; i<16 ; i++)
+    cout<<plaintxt[i];
+     cout<<endl; 
+ 
+      }
+  
+  ////////////////////////
+
+   
+  
+  
+}

@@ -1,0 +1,391 @@
+#include <iostream>
+#include<map>
+using namespace std ;
+//b=decimal to binary 
+void decToBinary(int n)
+{
+    // array to store binary number
+    int binaryNum[8];
+    for(int i = 0  ;i<8 ; i++) binaryNum[i] = 0 ;
+    // counter for binary array
+    int i = 0;
+    while (n > 0) {
+ 
+        // storing remainder in binary array
+        binaryNum[i] = n % 2;
+        n = n / 2;
+        i++;
+    }
+ 
+    // printing binary array in reverse order
+    for (int j = 7; j >= 0; j--)
+        cout << binaryNum[j];
+   
+}
+
+//print 
+void print (char arr[])
+{
+  for(int i = 0 ; i< 16 ;i++)cout<<arr[i];
+  cout<<endl ;
+}
+void printkey (string key, int in )
+{
+  for(int i =in  ; i<in+5 ; i++)
+    cout<<key[i];
+    cout<<endl<<endl ;
+}
+// Operations
+
+// 1 Ceaser 
+void caesar( char text [], char key , int txt_p ,map <int,char> l, map<char , int> n  )
+{
+  for(int i = txt_p ; i<txt_p+16  ; i++)
+    {
+      int c = (n[text[i]] + n[key] )% 52; 
+      text[i] = l[c];
+      }
+}
+
+// 2 XOR with 2 
+void xxor(char text [],int txt_p , map<int,char> l , map <char,int> n)
+{
+  for(int i = txt_p ; i<txt_p +16  ;i++)
+    {
+      int x = n[text[i]] xor 2 ;
+      text [i]= l[x];
+    }
+}
+
+//3  Swapping
+void Swapping(char text[] , int txt_p )
+{ 
+  //first bit with the size'th bit
+  //second with the size-1 'th bit ... 
+  for(int i = txt_p , j=txt_p+15 ; i<((2*txt_p +15) /2) ; i++ , j-- )
+    {
+      char temp = text[i];
+      text[i]=text[j];
+      text[j]= temp ;
+    }
+}
+
+//4 Circular shift 
+void circular_shift(char text[] , int txt_p)
+{
+  //to right 
+  char last = text[txt_p+15];
+  for(int i = txt_p +15 ; i> txt_p ; i--)
+    {
+      text[i] =text[i-1];
+    }
+  text[txt_p]= last ; 
+}
+
+
+
+using namespace std ; 
+
+
+int main() {
+
+
+         /////////////////////////////
+         /////////////MAPS///////////
+         ///////////////////////////
+
+   // 1) initializing the map (i give it a number it gives a letter that this number represents)
+  map <int  , char  > letters ;
+  
+  char a = 'A';
+  for(int i = 0 ; i<26 ; i++)
+    {
+      letters[i]= a;
+      a++;
+    }
+  a = 'a';
+  for(int i = 26 ; i<52 ; i++)
+    {
+      letters[i]= a;
+      a++;
+    }
+   // 2) initializing the map (i give it a letter it gives a number that this letter represents)
+  map<char , int> num ;
+
+  int A = 0;
+  for(char i = 'A' ; i<='Z' ; i++)
+    {
+      num[i]= A;
+      A++;
+    }
+  a = 26;
+  for(char i ='a'  ; i<='z'; i++)
+    {
+      num[i]= a;
+      a++;
+    }
+
+
+
+
+         /////////////////////////////
+         ///////////TRACING//////////
+         ///////////////////////////       
+
+
+  char plaintxt[112] = {'T','a','l','a','R','a','e','d','H','a','s','h','e','m','m','m','T','a','l','a','E','m','a','d','I','b','r','a','h','e','e','m','J','o','u','d','B','a','n','i','I','s','m','a','e','i','i','l','D','a','n','a','S','a','m','e','e','r','h','a','d','d','a','d','R','u','n','d','H','a','n','i','i','R','a','s','h','e','e','d','B','a','n','a','S','a','m','e','r','E','l','a','y','y','a','n','L','u','n','a','r','J','a','m','a','l','S','a','l','a','m','e'};
+
+
+string key ="StudentsOfComputerEngineeringMajorr";
+
+
+char s1 [16] ; 
+int p1 = 0;  
+char s2 [16]; 
+int p2 = 16;   
+char s3 [16]; 
+int p3 = 32;   
+char s4 [16];
+int p4 = 48;   
+char s5 [16] ;
+int p5 = 64;   
+char s6 [16] ;
+int p6 = 80;   
+char s7 [16];
+int p7 = 96;   
+
+  for(int  i = 0 ; i< 16 ; i++)
+    {
+      s1[i]=plaintxt[p1+i]; 
+      s2[i]=plaintxt[p2+i];
+      s3[i]=plaintxt[p3+i];
+      s4[i]=plaintxt[p4+i]; 
+      s5[i]=plaintxt[p5+i];
+      s6[i]=plaintxt[p6+i];
+      s7[i]=plaintxt[p7+i]; 
+    }
+
+      ////////////////////////////////////
+      ////////FIRST CLK CYCLE ////////////
+      ///////////////////////////////////
+  cout<<"**** First Clock Cycle ****  : \n \n";
+  cout<<"   -Tracing of text 1 -\n";
+  cout<<"Memory : \n";
+  cout<<"Partial Text is : \n";
+     print(s1);
+  cout<<"Partial Key is : \n";
+   printkey(key,0);
+  cout<<"ROUND1/STAGE 1 OF TEXT 1 :\n";
+  cout<<"first char of key :" <<key[0]<<endl;
+  caesar(s1,key[0],0,letters,num);
+  cout<<endl ;
+  cout<<"Op1_stage1 is:";
+  for(int i=0 ; i<16;i++)
+   decToBinary( num[s1[i]]);
+   cout<<endl ;
+   xxor(s1,0,letters,num);
+  cout<<"Op2_ stage1 is :";
+  print(s1);
+  circular_shift(s1,0);
+  cout<<"Op3_ stage1 is :";
+  print(s1);
+  cout<<"Cipher 1 :";
+  Swapping(s1,0);
+  print(s1);
+  cout<<"END ROUND1/STAGE 1 OF TEXT 1 \n\n";
+
+
+      ////////////////////////////////////
+      ////////SECOND CLK CYCLE ////////////
+      ///////////////////////////////////
+
+
+
+  
+  cout<<"**** Second Clock Cycle ****  : \n \n";
+
+
+
+        //////text 1 ////////
+  cout<<"   -Tracing of text 1 -\n";
+  
+   
+  cout<<"ROUND2/STAGE 2 OF TEXT 1 :\n";
+  cout<<"second char of key :" <<key[1]<<endl;
+  caesar(s1,key[1],0,letters,num);
+  cout<<endl ;
+  cout<<"Op1_stage2 is:";
+  for(int i=0 ; i<16;i++)
+   decToBinary( num[s1[i]]);
+   cout<<endl ;
+   xxor(s1,0,letters,num);
+  cout<<"Op2_ stage2 is :";
+  print(s1);
+  circular_shift(s1,0);
+  cout<<"Op3_ stage2 is :";
+  print(s1);
+  cout<<"Cipher 2 :";
+  Swapping(s1,0);
+  print(s1);
+
+        //////text 2 ////////
+
+
+   cout<<"   -Tracing of text 2 -\n";
+  cout<<"Memory : \n";
+  cout<<"Partial Text is : \n";
+     print(s2);
+  cout<<"Partial Key is : \n";
+   printkey(key,5);
+  cout<<"ROUND1/STAGE 1 OF TEXT 2 :\n";
+  cout<<"first char of key :" <<key[5]<<endl;
+  caesar(s2,key[5],0,letters,num);
+  cout<<endl ;
+  cout<<"Op1_stage1 is:";
+  for(int i=0 ; i<16;i++)
+   decToBinary( num[s2[i]]);
+   cout<<endl ;
+   xxor(s2,0,letters,num);
+  cout<<"Op2_ stage1 is :";
+  print(s2);
+  circular_shift(s2,0);
+  cout<<"Op3_ stage1 is :";
+  print(s2);
+  cout<<"Cipher 1 :";
+  Swapping(s2,0);
+  print(s2);
+  cout <<endl ; 
+  
+  cout<<"END ROUND2/STAGE 2 OF TEXT 1  && END ROUND1/STAGE 1 OF TEXT 2\n\n";
+
+
+
+
+
+
+
+      ////////////////////////////////////
+      ////////THIRD CLK CYCLE ////////////
+      ///////////////////////////////////
+  
+  cout<<"**** Third Clock Cycle ****  : \n \n";
+
+      //// text 1 ////
+  cout<<"   -Tracing of text 1 -\n";
+  cout<<"ROUND3/STAGE 3 OF TEXT 1 :\n";
+  cout<<"third char of key :" <<key[2]<<endl;
+  caesar(s1,key[2],0,letters,num);
+  cout<<endl ;
+  cout<<"Op1_stage3 is:";
+  for(int i=0 ; i<16;i++)
+   decToBinary( num[s1[i]]);
+   cout<<endl ;
+   xxor(s1,0,letters,num);
+  cout<<"Op2_ stage3 is :";
+  print(s1);
+  circular_shift(s1,0);
+  cout<<"Op3_ stage3 is :";
+  print(s1);
+  cout<<"Cipher 3 :";
+  Swapping(s1,0);
+  print(s1);
+  cout<<endl<<endl ; 
+  ///text 2 ////
+
+  cout<<"ROUND2/STAGE 2 OF TEXT 2 :\n";
+  cout<<"second char of key :" <<key[6]<<endl;
+  caesar(s2,key[6],0,letters,num);
+  cout<<endl ;
+  cout<<"Op1_stage2 is:";
+  for(int i=0 ; i<16;i++)
+   decToBinary( num[s2[i]]);
+   cout<<endl ;
+   xxor(s2,0,letters,num);
+  cout<<"Op2_ stage2 is :";
+  print(s2);
+  circular_shift(s2,0);
+  cout<<"Op3_ stage2 is :";
+  print(s2);
+  cout<<"Cipher 2 :";
+  Swapping(s2,0);
+  print(s2);
+  cout<<endl <<endl ; 
+  
+ /// text 3 ///
+   cout<<"   -Tracing of text 3 -\n";
+  cout<<"Memory : \n";
+  cout<<"Partial Text is : \n";
+     print(s3);
+  cout<<"Partial Key is : \n";
+   printkey(key,10);
+  cout<<"ROUND1/STAGE 1 OF TEXT 3 :\n";
+  cout<<"first char of key :" <<key[10]<<endl;
+  caesar(s3,key[10],0,letters,num);
+  cout<<endl ;
+  cout<<"Op1_stage1 is:";
+  for(int i=0 ; i<16;i++)
+   decToBinary( num[s3[i]]);
+   cout<<endl ;
+   xxor(s3,0,letters,num);
+  cout<<"Op2_ stage1 is :";
+  print(s3);
+  circular_shift(s3,0);
+  cout<<"Op3_ stage1 is :";
+  print(s3);
+  cout<<"Cipher 1 :";
+  Swapping(s3,0);
+  print(s3);
+  cout <<endl <<endl ; 
+
+  
+  cout<<"END ROUND3/STAGE 3 OF TEXT 1 && END ROUND2/STAGE 2 OF TEXT 3  && END ROUND1/STAGE 1 OF TEXT 3 \n\n";
+
+
+  //////////////////////////////////
+  //////////////Chiphers///////////
+  ////////////////////////////////
+
+  cout<<"** Fifth CLK Cycle **\n";
+  cout<<"Cipher Text of Text1 is :";
+  for(int i = 0 ; i<2 ; i++)
+    {
+      caesar(s1,key[i+3],0,letters,num);
+      xxor(s1,0,letters,num);
+      circular_shift(s1,0);
+      Swapping(s1,0);
+      ////////////
+      caesar(s2,key[i+7],0,letters,num);
+      xxor(s2,0,letters,num);
+      circular_shift(s2,0);
+      Swapping(s2,0);
+      //////////////
+      caesar(s3,key[i+11],0,letters,num);
+      xxor(s3,0,letters,num);
+      circular_shift(s3,0);
+      Swapping(s3,0);
+    }
+   print(s1);
+
+  ////////////////////////////
+  cout<<"\n\n\n** Sixth CLK Cycle **\n";
+  cout<<"Cipher Text of Text2 is :";
+   caesar(s2,key[9],0,letters,num);
+      xxor(s2,0,letters,num);
+      circular_shift(s2,0);
+      Swapping(s2,0);
+      print(s2);
+
+  ///////////////////////////////////
+
+   cout<<"\n\n\n** Seventh CLK Cycle **\n";
+  cout<<"Cipher Text of Text3 is :";
+  for(int i = 0 ; i<2 ; i++)
+    {
+   caesar(s3,key[i+13],0,letters,num);
+      xxor(s3,0,letters,num);
+      circular_shift(s3,0);
+      Swapping(s3,0);
+      }
+      print(s3);
+      
+  }
